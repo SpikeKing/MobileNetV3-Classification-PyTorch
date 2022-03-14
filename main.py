@@ -17,6 +17,7 @@ def get_args():
     parser = argparse.ArgumentParser("parameters")
 
     parser.add_argument("--dataset-mode", type=str, default="IMAGENET", help="(example: CIFAR10, CIFAR100, IMAGENET), (default: IMAGENET)")
+    parser.add_argument("--num-classes", type=int, default=-1, help="number of classes, (default: -1)")
     parser.add_argument("--epochs", type=int, default=100, help="number of epochs, (default: 100)")
     parser.add_argument("--batch-size", type=int, default=512, help="number of batch size, (default, 512)")
     parser.add_argument("--learning-rate", type=float, default=1e-1, help="learning_rate, (default: 1e-1)")
@@ -200,6 +201,11 @@ def main():
         num_classes = 100
     elif args.dataset_mode == "IMAGENET":
         num_classes = 1000
+    else:
+        num_classes = 1000
+
+    if args.num_classes != -1:
+        num_classes = args.num_classes
     print('num_classes: ', num_classes)
 
     model = MobileNetV3(model_mode=args.model_mode, num_classes=num_classes, multiplier=args.multiplier, dropout_rate=args.dropout).to(device)
