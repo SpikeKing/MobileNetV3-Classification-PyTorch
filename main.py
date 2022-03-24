@@ -24,7 +24,7 @@ def get_args():
     parser.add_argument("--learning-rate", type=float, default=1e-1, help="learning_rate, (default: 1e-1)")
     parser.add_argument("--dropout", type=float, default=0.8, help="dropout rate, not implemented yet, (default: 0.8)")
     parser.add_argument('--model-mode', type=str, default="LARGE", help="(example: LARGE, SMALL), (default: LARGE)")
-    parser.add_argument("--load-pretrained", type=bool, default=False, help="(default: False)")
+    parser.add_argument("--load-pretrained", type=str, default="", help="pretrained model, (default: "")")
     parser.add_argument('--evaluate', type=bool, default=False, help="Testing time: True, (default: False)")
     parser.add_argument('--multiplier', type=float, default=1.0, help="(default: 1.0)")
     parser.add_argument('--print-interval', type=int, default=5, help="training information and evaluation information output frequency, (default: 5)")
@@ -217,9 +217,9 @@ def main():
         model = nn.DataParallel(model).to(device)
 
     if args.load_pretrained or args.evaluate:
-        filename = "best_model_" + str(args.model_mode)
+        # filename = "best_model_" + str(args.model_mode)
         # checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
-        checkpoint = torch.load(os.path.join(args.saved_folder, filename + '_ckpt.t7'))
+        checkpoint = torch.load(os.path.join(args.saved_folder, args.load_pretrained))
         model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
