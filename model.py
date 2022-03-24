@@ -134,7 +134,7 @@ class MobileNetV3(nn.Module):
         super(MobileNetV3, self).__init__()
         self.num_classes = num_classes
 
-        if model_mode == "LARGE":
+        if "LARGE" in model_mode:
             layers = [
                 [16, 16, 3, 1, "RE", False, 16],
                 [16, 24, 3, 2, "RE", False, 64],
@@ -186,7 +186,7 @@ class MobileNetV3(nn.Module):
                 nn.Conv2d(out_conv2_out, self.num_classes, kernel_size=1, stride=1),
             )
 
-        elif model_mode == "SMALL":
+        elif "SMALL" in model_mode:
             layers = [
                 [16, 16, 3, 2, "RE", True, 16],
                 [16, 24, 3, 2, "RE", False, 72],

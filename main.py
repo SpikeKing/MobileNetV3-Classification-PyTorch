@@ -18,6 +18,7 @@ def get_args():
 
     parser.add_argument("--dataset-mode", type=str, default="IMAGENET", help="(example: CIFAR10, CIFAR100, IMAGENET), (default: IMAGENET)")
     parser.add_argument("--num-classes", type=int, default=-1, help="number of classes, (default: -1)")
+    parser.add_argument("--saved-folder", type=str, default="checkpoint", help="folder of saved model, (default: checkpoint)")
     parser.add_argument("--epochs", type=int, default=100, help="number of epochs, (default: 100)")
     parser.add_argument("--batch-size", type=int, default=512, help="number of batch size, (default, 512)")
     parser.add_argument("--learning-rate", type=float, default=1e-1, help="learning_rate, (default: 1e-1)")
@@ -217,7 +218,8 @@ def main():
 
     if args.load_pretrained or args.evaluate:
         filename = "best_model_" + str(args.model_mode)
-        checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
+        # checkpoint = torch.load('./checkpoint/' + filename + '_ckpt.t7')
+        checkpoint = torch.load(os.path.join(args.saved_folder, filename + '_ckpt.t7'))
         model.load_state_dict(checkpoint['model'])
         epoch = checkpoint['epoch']
         acc1 = checkpoint['best_acc1']
@@ -260,10 +262,12 @@ def main():
                     'best_acc5': best_acc5,
                     'epoch': epoch,
                 }
-                if not os.path.isdir('checkpoint'):
-                    os.mkdir('checkpoint')
+                # if not os.path.isdir('checkpoint'):
+                #     os.mkdir('checkpoint')
+                if not os.path.isdir(args.saved_folder):
+                    os.mkdir(args.saved_folder)
                 filename = "best_model_" + str(args.model_mode)
-                torch.save(state, './checkpoint/' + filename + '_ckpt.t7')
+                torch.save(state, os.path.join(args.saved_folder, filename + '_ckpt.t7'))
 
             time_interval = time.time() - start_time
             time_split = time.gmtime(time_interval)
